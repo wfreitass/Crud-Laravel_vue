@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Cliente;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class ClienteController extends Controller
 {
@@ -41,6 +43,11 @@ class ClienteController extends Controller
     {
         try {
             $cliente = Cliente::create($request->all());
+            Storage::disk('local')->put('/clientes', $request->all('photo')['photo']);
+            // Mail::send('mail.cliente', ['Novo Cliente' => 'NOvo CLiente Teste'], function ($sm) {
+            //     $sm->from('wiltterfreitasw@gmail.com');
+            //     $sm->to('wiltterfreitass@gmail.com');
+            // });
         } catch (Exception $e) {
             $cliente = $e->getMessage();
         }
@@ -48,6 +55,7 @@ class ClienteController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'dados' => $request->all('photo')['photo'],
             'cliente'   => $cliente
         ]);
     }

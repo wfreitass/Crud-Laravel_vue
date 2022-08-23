@@ -2087,10 +2087,23 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    selectFile: function selectFile(event) {
+      this.cliente.photo = event.target.files[0];
+    },
     adicionarCliente: function adicionarCliente() {
       var _this = this;
 
-      this.axios.post('http://localhost:8000/api/clientes', this.cliente).then(function (response) {
+      var data = new FormData(); // data.append(...cliente.cliente);
+
+      data.append('photo', this.cliente.photo);
+      data.append('name', this.cliente.name);
+      data.append('email', this.cliente.email);
+      data.append('rg', this.cliente.rg);
+      data.append('phone', this.cliente.phone);
+      data.append('address', this.cliente.address);
+      console.log(this.cliente.photo);
+      console.log(data);
+      this.axios.post('http://localhost:8000/api/clientes', data).then(function (response) {
         return (// this.$router.push({ name: 'home' })
           // this.$router.push({ name: 'ProductIndex' })
           console.log(response)
@@ -2382,7 +2395,11 @@ var render = function render() {
     staticClass: "card-header"
   }, [_vm._v("Adicionar Cliente")]), _vm._v(" "), _c("div", {
     staticClass: "card-body"
-  }, [_c("form", [_c("div", {
+  }, [_c("form", {
+    attrs: {
+      enctype: "multipart/form-data"
+    }
+  }, [_c("div", {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "form-group col-md-12"
@@ -2526,7 +2543,23 @@ var render = function render() {
         _vm.$set(_vm.cliente, "address", $event.target.value);
       }
     }
-  })]), _vm._v(" "), _vm._m(0), _vm._v(" "), _c("button", {
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "form-group col-md-6 mb-3"
+  }, [_c("label", {
+    attrs: {
+      "for": "photo"
+    }
+  }, [_vm._v("Foto")]), _vm._v(" "), _c("input", {
+    staticClass: "form-control",
+    attrs: {
+      type: "file",
+      id: "photo",
+      name: "photo"
+    },
+    on: {
+      change: _vm.selectFile
+    }
+  })]), _vm._v(" "), _c("button", {
     staticClass: "btn btn-primary btn-lg btn-block",
     attrs: {
       type: "button"
@@ -2539,24 +2572,7 @@ var render = function render() {
   }, [_vm._v("Salvar")])])])])])])])]);
 };
 
-var staticRenderFns = [function () {
-  var _vm = this,
-      _c = _vm._self._c;
-
-  return _c("div", {
-    staticClass: "form-group col-md-6 mb-3"
-  }, [_c("label", {
-    attrs: {
-      "for": "photo"
-    }
-  }, [_vm._v("Foto")]), _vm._v(" "), _c("input", {
-    staticClass: "form-control",
-    attrs: {
-      type: "file",
-      id: "photo"
-    }
-  })]);
-}];
+var staticRenderFns = [];
 render._withStripped = true;
 
 

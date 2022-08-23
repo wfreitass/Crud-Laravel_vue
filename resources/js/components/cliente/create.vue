@@ -6,7 +6,7 @@
                     <div class="card-header">Adicionar Cliente</div>
 
                     <div class="card-body">
-                        <form>
+                        <form enctype="multipart/form-data">
                             <div class="row">
                                 <div class="form-group col-md-12">
                                     <label for="nome">Nome</label>
@@ -32,7 +32,8 @@
                                 </div>
                                 <div class="form-group col-md-6 mb-3">
                                     <label for="photo">Foto</label>
-                                    <input type="file" class="form-control" id="photo">
+                                    <input type="file" @change="selectFile" class="form-control" id="photo"
+                                        name="photo">
                                 </div>
                                 <button type="button" class="btn btn-primary btn-lg btn-block"
                                     @click="adicionarCliente()">Salvar</button>
@@ -54,9 +55,22 @@ export default {
         }
     },
     methods: {
+        selectFile(event) {
+            this.cliente.photo = event.target.files[0];
+        },
         adicionarCliente() {
+            const data = new FormData();
+            // data.append(...cliente.cliente);
+            data.append('photo', this.cliente.photo)
+            data.append('name', this.cliente.name)
+            data.append('email', this.cliente.email)
+            data.append('rg', this.cliente.rg)
+            data.append('phone', this.cliente.phone)
+            data.append('address', this.cliente.address)
+            console.log(this.cliente.photo);
+            console.log(data);
             this.axios
-                .post('http://localhost:8000/api/clientes', this.cliente)
+                .post('http://localhost:8000/api/clientes', data)
                 .then(response => (
                     // this.$router.push({ name: 'home' })
                     // this.$router.push({ name: 'ProductIndex' })
