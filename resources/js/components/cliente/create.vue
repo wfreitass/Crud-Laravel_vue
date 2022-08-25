@@ -20,7 +20,7 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="rg">RG</label>
-                                    <input type="text" class="form-control" id="rg" v-model="cliente.rg">
+                                    <input type="text" class="form-control" id="rg" maxlength="7" v-model="cliente.rg">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="phone">Telefone</label>
@@ -56,25 +56,25 @@ export default {
     },
     methods: {
         selectFile(event) {
-            this.cliente.photo = event.target.files[0];
+            this.cliente.photo = event.target.files[0] || null;
         },
         adicionarCliente() {
             const data = new FormData();
             // data.append(...cliente.cliente);
-            data.append('photo', this.cliente.photo)
+
             data.append('name', this.cliente.name)
             data.append('email', this.cliente.email)
             data.append('rg', this.cliente.rg)
             data.append('phone', this.cliente.phone)
             data.append('address', this.cliente.address)
-            console.log(this.cliente.photo);
-            console.log(data);
+            if(this.cliente.photo != null && this.cliente.photo != undefined){
+                data.append('photoupload', this.cliente.photo)
+                data.append('photo', this.cliente.photo.name)
+            }
             this.axios
                 .post('http://localhost:8000/api/clientes', data)
                 .then(response => (
-                    // this.$router.push({ name: 'home' })
-                    // this.$router.push({ name: 'ProductIndex' })
-                    console.log(response)
+                   this.$router.push({ name: 'ClienteIndex' })
                 ))
                 .catch(err => console.log(err))
                 .finally(() => this.loading = false)

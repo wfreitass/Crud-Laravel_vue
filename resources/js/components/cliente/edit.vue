@@ -20,7 +20,7 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="rg">RG</label>
-                                    <input type="text" class="form-control" id="rg" v-model="cliente.rg">
+                                    <input type="text" maxlength="7" class="form-control" id="rg" v-model="cliente.rg">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="phone">Telefone</label>
@@ -31,14 +31,19 @@
                                     <input type="text" v-model="cliente.address" class="form-control" id="address">
                                 </div>
                                 <div class="form-group col-md-6 mb-3">
-                                    <label for="photo">Foto</label>
-                                    <input type="file" class="form-control" id="photo">
+                                    <!-- <label for="photo">Foto</label>
+                                    <input type="file" class="form-control" id="photo"> -->
+                                </div>
+                                <div class="form-group col-md-6 mb-3">
+                                        <img class="w-75 h-75" :src="'storage/clientes/'+cliente.photo" alt="">
                                 </div>
                                 <button type="button" class="btn btn-primary btn-lg btn-block"
                                     @click="atualizarCliente()">Salvar</button>
 
                             </div>
                         </form>
+                        <!-- <img src='storage/clientes/1661433127.png' alt=""> -->
+
                     </div>
                 </div>
             </div>
@@ -64,10 +69,11 @@ export default {
                 });
         },
         atualizarCliente() {
+
             this.axios
                 .patch(`http://127.0.0.1:8000/api/clientes/${this.$route.params.clienteId}`, this.cliente)
                 .then((res) => {
-                    this.$router.push({ name: 'ProductIndex' });
+                    this.$router.push({ name: 'ClienteIndex' });
                 });
         }
     }

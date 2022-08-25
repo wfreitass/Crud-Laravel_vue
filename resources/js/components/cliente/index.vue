@@ -65,7 +65,8 @@ export default {
                 .delete(`http://127.0.0.1:8000/api/clientes/${clienteId}`)
                 .then(response => {
                     let i = this.clientes.map(data => data.id).indexOf(clienteId);
-                    this.clientes.splice(i, 1)
+                    this.clientes.splice(i, 1);
+                    console.log(response);
                 });
         }
     }

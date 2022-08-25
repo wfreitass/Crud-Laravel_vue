@@ -3,7 +3,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="collapse navbar-collapse">
                 <div class="navbar-nav">
-                    <router-link :to="{ name: 'ProductIndex' }" class="nav-item nav-link">Products</router-link>
+                    <router-link :to="{ name: 'ClienteIndex' }" class="nav-item nav-link">Clientes</router-link>
                 </div>
             </div>
         </nav>

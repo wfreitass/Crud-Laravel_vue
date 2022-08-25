@@ -42,20 +42,23 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         try {
-            $cliente = Cliente::create($request->all());
-            Storage::disk('local')->put('/clientes', $request->all('photo')['photo']);
+            $cliente = $request->all();
+            if(array_key_exists("photo", $cliente)){
+                $ext = pathinfo($request->all('photo')['photo'], PATHINFO_EXTENSION);
+                $cliente['photo'] = time() . '.' . $ext;
+                Storage::putFileAs('public/clientes',$request->file('photoupload'),  $cliente['photo'] );
+            }
+            $cliente = Cliente::create($cliente);
+
             // Mail::send('mail.cliente', ['Novo Cliente' => 'NOvo CLiente Teste'], function ($sm) {
             //     $sm->from('wiltterfreitasw@gmail.com');
-            //     $sm->to('wiltterfreitass@gmail.com');
+            //     $sm->to($request->all('email')['email']);
             // });
         } catch (Exception $e) {
             $cliente = $e->getMessage();
         }
-
-
         return response()->json([
             'status' => 'success',
-            'dados' => $request->all('photo')['photo'],
             'cliente'   => $cliente
         ]);
     }
@@ -99,7 +102,6 @@ class ClienteController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'post'   => $cliente
         ]);
     }
 
@@ -111,9 +113,12 @@ class ClienteController extends Controller
      */
     public function destroy($id)
     {
-        $Cliente = Cliente::find($id);
-        $Cliente->delete();
+        $cliente = Cliente::find($id);
+        if($cliente['photo']){
+            Storage::delete("public/clientes/" . $cliente['photo']);
+        }
+        $cliente->delete();
 
-        return response()->json('Cliente Excluído da base de dados com sucesso');
+        return response()->json(['message' =>'Cliente Excluído da base de dados com sucesso']);
     }
 }
